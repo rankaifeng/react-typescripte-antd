@@ -1,26 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import Button from './components/button';
+const styles = {
+  remove: {
+    margin: '0 10px',
+  },
+};
+const initialState = { clicksCount: 0 };
+type State = Readonly<typeof initialState>;
+class App extends Component<object, State> {
+  readonly state: State = initialState;
 
-const App: React.FC = () => {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  render() {
+    const { clicksCount } = this.state;
+
+    return (
+      <>
+        <Button onClick={this.handleIncrement}>增加</Button>
+        <Button onClick={this.handleDecrement} styles={styles.remove}>
+          减少
+        </Button>
+        你点了 {clicksCount} 次!
+      </>
+    );
+  }
+  private handleIncrement = () => this.setState(incrementClicksCount);
+  private handleDecrement = () => {
+    const { clicksCount } = this.state;
+    if (clicksCount == 0) {
+      return;
+    }
+    this.setState(decrementClicksCount);
+  };
 }
+const incrementClicksCount = (prevState: State) => ({
+  clicksCount: prevState.clicksCount + 1,
+});
+const decrementClicksCount = (prevState: State) => ({
+  clicksCount: prevState.clicksCount - 1,
+});
 
 export default App;
